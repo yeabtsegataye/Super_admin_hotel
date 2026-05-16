@@ -77,11 +77,62 @@ export type SubscriberRecord = {
   expiryDate: string | null;
 };
 
-export type AuditEntry = {
+// In your types file
+export interface ExpiredLicenseRecord {
+  userId: number;
+  userEmail: string;
+  hotelName: string;
+  phone: string;
+  expiryDate: string;
+  isBlocked: boolean;
+}
+
+export interface UserDetails {
+  id: number;
+  fullName: string;
+  email: string;
+  phone: string;
+  role: string;
+  isBlocked: boolean;
+  licenceKey: string;
+  licenceExpiryDate: string;
+  createdAt: string;
+  hotels: Array<{
+    id: number;
+    name: string;
+    description: string;
+  }>;
+}
+
+// types/index.ts
+export interface AuditEntry {
   id: number;
   action: string;
   actor: string;
+  actorId?: number;
+  actorRole?: string;
   target: string;
-  details?: string;
+  targetId?: number;
+  details: string;
+  ipAddress: string;
+  userAgent: string;
+  location: string;
+  method: string;
+  endpoint: string;
+  oldData?: any;
+  newData?: any;
   createdAt: string;
-};
+}
+export interface LicenseInfo {
+  userId: number;
+  userEmail: string;
+  userName: string;
+  hasLicense: boolean;
+  status: 'active' | 'expired' | 'no_license';
+  expiryDate: string | null;
+  daysRemaining: number;
+  packageName: string;
+  packageId: number | null;
+  isBlocked: boolean;
+  hotels: string[];
+}

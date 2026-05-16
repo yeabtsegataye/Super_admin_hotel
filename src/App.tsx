@@ -7,10 +7,11 @@ import SignupPage from './pages/SignupPage';
 import OverviewPage from './pages/OverviewPage';
 import ManageUsersPage from './pages/ManageUsersPage';
 import ManagePackagesPage from './pages/ManagePackagesPage';
-import AnalyticsPage from './pages/AnalyticsPage';
+import ExpiredLicensesPage from './pages/ExpiredLicensesPage';
 import PaymentsPage from './pages/PaymentsPage';
 import SecurityPage from './pages/SecurityPage';
 import NotFoundPage from './pages/NotFoundPage';
+import UserDetailsPage from './pages/UserDetailsPage';
 
 function App() {
   const auth = useAuth();
@@ -26,8 +27,9 @@ function App() {
           <Route element={<AdminLayout />}>
             <Route path="/dashboard" element={<OverviewPage />} />
             <Route path="/users" element={<ManageUsersPage />} />
+            <Route path="/users/expired" element={<ExpiredLicensesPage />} />
+              <Route path="users/:userId" element={<UserDetailsPage />} />
             <Route path="/packages" element={<ManagePackagesPage />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/security" element={<SecurityPage />} />
           </Route>
