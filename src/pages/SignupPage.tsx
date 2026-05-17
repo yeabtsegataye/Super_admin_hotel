@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+// import { useAuth } from '../context/AuthContext';
 
 export default function SignupPage() {
-  const auth = useAuth();
+    // const auth = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -18,7 +18,7 @@ export default function SignupPage() {
 
     try {
       console.log('Attempting to sign up with:', { name, email, password });
-      await auth.signup({ name, email, password });
+      // await auth.signup({ name, email, password });
       
       navigate('/login', { replace: true });
     } catch {

@@ -1,5 +1,7 @@
-import { NavLink } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLogoutMutation } from '../features/auth/authApiSlice';
+import { logOut } from '../features/auth/authSlice';
 
 type SidebarProps = {
   isOpen?: boolean;
@@ -15,7 +17,22 @@ const navItems = [
 ];
 
 export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
-  const auth = useAuth();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logout] = useLogoutMutation();
+  const user = useSelector((state: any) => state.auth.user);
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      dispatch(logOut());
+      navigate('/login');
+    } catch (error) {
+      // Even if the API call fails, clear local state
+      dispatch(logOut());
+      navigate('/login');
+    }
+  };
 
   return (
     <>
@@ -88,9 +105,11 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
         <div className="mt-auto space-y-3 rounded-3xl border border-slate-800 bg-slate-950/70 p-4">
           <p className="text-sm text-slate-400">Signed in as:</p>
-          <p className="truncate text-base font-semibold text-white">{auth.user?.email ?? 'Admin'}</p>
+          <p className="truncate text-base font-semibold text-white">
+            {user?.email || user?.payload?.email || 'Admin'}
+          </p>
           <button
-            onClick={auth.logout}
+            onClick={handleLogout}
             className="w-full rounded-2xl bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-200 hover:bg-slate-700"
           >
             Logout

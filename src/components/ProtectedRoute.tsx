@@ -1,13 +1,11 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Navigate, Outlet } from 'react-router-dom';
 
-export default function ProtectedRoute() {
-  const auth = useAuth();
-  const location = useLocation();
+interface ProtectedRouteProps {
+  isVerified: boolean;
+  isAuthenticated: boolean;
+}
 
-  if (!auth.isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  return <Outlet />;
+export default function ProtectedRoute({ isVerified, isAuthenticated }: ProtectedRouteProps) {
+  console.log("ProtectedRoute - isVerified:", isVerified, "isAuthenticated:", isAuthenticated);
+  return isVerified && isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 }

@@ -1,30 +1,73 @@
 import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useDispatch } from 'react-redux';
+import CryptoJS from 'crypto-js';
+import { useLoginMutation } from '../features/auth/authApiSlice';
+import { setCredentials } from '../features/auth/authSlice';
+
+const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
 
 export default function LoginPage() {
-  const auth = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const [login] = useLoginMutation();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [formValid, setFormValid] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/dashboard';
 
+  const validateEmail = (value: string) => {
+    const emailValid = value.match(/^([\w.%+-]+)@([\w-]{2,}\.)+([\w]{2,})$/i);
+    setEmailError(emailValid ? "" : "Email is invalid");
+    setFormValid(!!emailValid);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    validateEmail(value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError('');
-    setLoading(true);
+    
+    if (formValid) {
+      setLoading(true);
+      
+      try {
+        // Encrypt the password
+        const encryptedPassword = CryptoJS.AES.encrypt(
+          password,
+          SECRET_KEY
+        ).toString();
 
-    try {
-      await auth.login({ email, password });
-      navigate(from, { replace: true });
-    } catch {
-      setError('Login failed. Check your email and password.');
-    } finally {
-      setLoading(false);
+        const userData = await login({
+          email,
+          Password: encryptedPassword,
+        }).unwrap();
+        
+        if (userData) {
+          dispatch(setCredentials(userData));
+          navigate(from, { replace: true });
+        }
+      } catch (err: any) {
+        setError(err?.data?.message || err?.data || "Login failed. Check your email and password.");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setError("Please enter a valid email address");
     }
   };
 
@@ -43,10 +86,13 @@ export default function LoginPage() {
             <input
               type="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={handleEmailChange}
               required
-              className="mt-3 w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
+              className={`mt-3 w-full rounded-3xl border ${
+                emailError ? 'border-red-500' : 'border-slate-800'
+              } bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20`}
             />
+            {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
           </label>
 
           <label className="block text-sm font-medium text-slate-300">
@@ -54,18 +100,24 @@ export default function LoginPage() {
             <input
               type="password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={handlePasswordChange}
               required
-              minLength={8}
+              minLength={6}
               className="mt-3 w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20"
             />
           </label>
 
-          {error && <p className="text-sm text-rose-400">{error}</p>}
+          <div className="text-right mt-2">
+            <a href="/forgot_password" className="text-sm text-cyan-400 hover:underline">
+              Forgot Password?
+            </a>
+          </div>
+
+          {(error || emailError) && <p className="text-sm text-rose-400">{error || emailError}</p>}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={!formValid || loading}
             className="w-full rounded-3xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? 'Signing in…' : 'Sign in'}
