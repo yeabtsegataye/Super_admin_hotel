@@ -1,32 +1,61 @@
+// middleware/verifiToken.ts
 import axios from "axios";
 import { logOut } from "../features/auth/authSlice";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const verifyToken = async (token: string | null, dispatch: any, refresh: () => Promise<void>) => {
-  if (token) {
-    const url = `${VITE_API_URL}/auth/verify-token`;
-    const config = {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
-    };
+const verifyToken = async (token: string | null, dispatch: any, refresh: () => Promise<any>) => {
+  if (!token) {
+    return false;
+  }
 
-    try {
-      const response = await axios.post(url, {}, config);
-      return response.data.verified;
-    } catch (error: any) {
-      console.log(error.response?.data?.statusCode);
-      if (error.response?.data?.statusCode === 403) {
-        await refresh();
-        return true;
-      } else {
-        dispatch(logOut());
-        throw error;
+  const url = `${VITE_API_URL}/auth/verify-token`;
+  const config = {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+    withCredentials: true,
+  };
+
+  try {
+    const response = await axios.post(url, {}, config);
+    
+    // If token is valid
+    if (response.data.verified) {
+      return true;
+    }
+    
+    // Try to refresh token if verification failed but not due to token expiration
+    if (response.data.statusCode !== 401) {
+      try {
+        const refreshResult = await refresh();
+        if (refreshResult?.accessToken) {
+          return true;
+        }
+      } catch (refreshError) {
+        console.error('Refresh failed:', refreshError);
       }
     }
-  } else {
+    
+    return false;
+  } catch (error: any) {
+    console.log('Token verification error:', error.response?.data);
+    
+    // Token expired - try to refresh
+    if (error.response?.status === 401 || error.response?.data?.statusCode === 401) {
+      try {
+        const refreshResult = await refresh();
+        if (refreshResult?.accessToken) {
+          return true;
+        }
+      } catch (refreshError) {
+        console.error('Refresh failed:', refreshError);
+        dispatch(logOut());
+        return false;
+      }
+    }
+    
+    dispatch(logOut());
     return false;
   }
 };

@@ -1,11 +1,14 @@
-import { Navigate, Outlet } from 'react-router-dom';
+// components/ProtectedRoute.tsx
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuthVerification } from '../hooks/useAuthVerification';
 
-interface ProtectedRouteProps {
-  isVerified: boolean;
-  isAuthenticated: boolean;
-}
+export default function ProtectedRoute() {
+  const { isVerified, isLoading } = useAuthVerification();
+  const location = useLocation();
 
-export default function ProtectedRoute({ isVerified, isAuthenticated }: ProtectedRouteProps) {
-  console.log("ProtectedRoute - isVerified:", isVerified, "isAuthenticated:", isAuthenticated);
-  return isVerified && isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  if (isLoading) {
+    return <div>Loading...</div>; // Show loading indicator
+  }
+
+  return isVerified ? <Outlet /> : <Navigate to="/login" state={{ from: location.pathname }} replace />;
 }
