@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLogoutMutation } from '../features/auth/authApiSlice';
-import { logOut } from '../features/auth/authSlice';
+import { useLogoutMutation } from '../features/auth/authApiSlice.js';
+import { logOut } from '../features/auth/authSlice.js';
 
 type SidebarProps = {
   isOpen?: boolean;
@@ -24,12 +24,12 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
   const handleLogout = async () => {
     try {
-      await logout().unwrap();
-      dispatch(logOut());
+      await logout(undefined).unwrap();
+      dispatch(logOut(undefined));
       navigate('/login');
     } catch (error) {
       // Even if the API call fails, clear local state
-      dispatch(logOut());
+      dispatch(logOut(undefined));
       navigate('/login');
     }
   };

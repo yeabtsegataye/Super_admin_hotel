@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPackage, deletePackage, fetchPackages, updatePackage } from '../services/authService';
 import type { PackageItem } from '../types';
-import { Pencil, Trash2, Plus, Search, X, Check, Clock, DollarSign, Calendar, Tag, FileText, Star, Package } from 'lucide-react';
+import { Pencil, Trash2, Plus, Search, X, Check, Clock, Tag, Star, Package } from 'lucide-react';
 
 const pageSize = 10;
 

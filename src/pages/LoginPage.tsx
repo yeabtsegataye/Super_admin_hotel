@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import CryptoJS from 'crypto-js';
-import { useLoginMutation } from '../features/auth/authApiSlice';
-import { setCredentials } from '../features/auth/authSlice';
+import { useLoginMutation } from '../features/auth/authApiSlice.js';
+import { setCredentials } from '../features/auth/authSlice.js';
 
 const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
 

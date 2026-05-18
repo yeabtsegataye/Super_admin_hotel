@@ -1,12 +1,12 @@
 ﻿// App.tsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AdminLayout from "./layout/AdminLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import ForgotPassword from "./pages/Forget_password";
+import ForgotPassword from "./pages/Forget_password.jsx";
 import OverviewPage from "./pages/OverviewPage";
 import ManageUsersPage from "./pages/ManageUsersPage";
 import ManagePackagesPage from "./pages/ManagePackagesPage";
@@ -16,11 +16,9 @@ import SecurityPage from "./pages/SecurityPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import UserDetailsPage from "./pages/UserDetailsPage";
 import useRefreshToken from "./hooks/useRefreshToken";
-import { RouteGuard } from "./components/RouteGuard";
 
 function App() {
   const refresh = useRefreshToken();
-  const dispatch = useDispatch();
   const token = useSelector((state: any) => state.auth.token);
 
   // Only refresh on initial load if token exists

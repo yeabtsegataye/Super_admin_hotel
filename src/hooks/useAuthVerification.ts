@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logOut, setCredentials } from '../features/auth/authSlice';
+import { logOut } from '../features/auth/authSlice.js';
 import verifyToken from '../middleware/verifiToken';
 import useRefreshToken from './useRefreshToken';
 
@@ -26,13 +26,13 @@ export const useAuthVerification = () => {
       setIsVerified(verified);
       
       if (!verified) {
-        dispatch(logOut());
+        dispatch(logOut(undefined));
         navigate('/login', { replace: true });
       }
     } catch (error) {
       console.error('Auth verification failed:', error);
       setIsVerified(false);
-      dispatch(logOut());
+      dispatch(logOut(undefined));
       navigate('/login', { replace: true });
     } finally {
       setIsLoading(false);

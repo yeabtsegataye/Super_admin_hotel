@@ -82,9 +82,10 @@ export interface ExpiredLicenseRecord {
   userId: number;
   userEmail: string;
   hotelName: string;
-  phone: string;
+  phone?: string;
   expiryDate: string;
   isBlocked: boolean;
+  daysExpired?: number;
 }
 
 export interface UserDetails {
