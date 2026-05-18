@@ -1,7 +1,7 @@
 // components/RouteGuard.tsx
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useAuthVerification } from '../hooks/useAuthVerification';
 
 export const RouteGuard = ({ children }: { children: React.ReactNode }) => {

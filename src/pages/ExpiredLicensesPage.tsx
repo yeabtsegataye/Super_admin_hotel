@@ -53,7 +53,7 @@ export default function ExpiredLicensesPage() {
       filtered = filtered.filter(item =>
         item.userEmail.toLowerCase().includes(searchLower) ||
         item.hotelName.toLowerCase().includes(searchLower) ||
-        item.phone.includes(searchTerm) ||
+        item.phone?.toLowerCase().includes(searchLower) ||
         item.userId.toString().includes(searchTerm)
       );
     }
