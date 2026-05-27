@@ -145,7 +145,7 @@ export default function ManageUsersPage() {
 
       const dashboardUrl =
         import.meta.env.VITE_HOTEL_DASHBOARD_URL ||
-        'http://localhost:5174';
+        'https://hotel-main-dashboard.onrender.com';
 
       const url = `${dashboardUrl}/#/impersonate?token=${encodeURIComponent(token)}`;
       window.open(url, '_blank', 'noopener,noreferrer');
