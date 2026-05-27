@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import AdminLayout from "./layout/AdminLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
 import ForgotPassword from "./pages/Forget_password.jsx";
 import OverviewPage from "./pages/OverviewPage";
 import ManageUsersPage from "./pages/ManageUsersPage";
@@ -41,7 +40,6 @@ function App() {
           }
         />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
         <Route path="/forgot_password" element={<ForgotPassword />} />
         
         {/* Protected Routes */}

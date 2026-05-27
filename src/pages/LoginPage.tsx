@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import CryptoJS from 'crypto-js';
 import { useLoginMutation } from '../features/auth/authApiSlice.js';
@@ -124,12 +124,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-400">
-          Need an account?{' '}
-          <Link to="/signup" className="text-cyan-300 hover:text-cyan-400">
-            Sign up
-          </Link>
-        </p>
+
       </div>
     </div>
   );

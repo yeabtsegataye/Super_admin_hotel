@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPackage, deletePackage, fetchPackages, updatePackage } from '../services/authService';
 import type { PackageItem } from '../types';
-import { Pencil, Trash2, Plus, Search, X, Check, Clock, Tag, Star, Package } from 'lucide-react';
+import { Pencil, Trash2, Plus, Search, X, Check, Clock, Tag, Star, Package, Power } from 'lucide-react';
 
 const pageSize = 10;
 
@@ -18,6 +18,7 @@ export default function ManagePackagesPage() {
     durationUnit: 'month' as 'day' | 'month' | 'year',
     features: '',
     isTrial: false,
+    isEnabled: true,
   });
   const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(pageSize);
@@ -80,6 +81,7 @@ export default function ManagePackagesPage() {
       durationUnit: pack.durationUnit,
       features: pack.features.join(', '),
       isTrial: pack.isTrial || false,
+      isEnabled: pack.isEnabled ?? true,
     });
   };
 
@@ -94,6 +96,7 @@ export default function ManagePackagesPage() {
         durationUnit: form.durationUnit,
         features: form.features.split(',').map((feature) => feature.trim()).filter(Boolean),
         isTrial: form.isTrial,
+        isEnabled: form.isEnabled,
       };
       await updatePackage(id, payload);
       setPackages((current) =>
@@ -108,6 +111,7 @@ export default function ManagePackagesPage() {
                 durationUnit: payload.durationUnit,
                 features: payload.features,
                 isTrial: payload.isTrial,
+                isEnabled: payload.isEnabled,
               }
             : pack,
         ),
@@ -146,10 +150,11 @@ export default function ManagePackagesPage() {
         durationUnit: form.durationUnit,
         features: form.features.split(',').map((feature) => feature.trim()).filter(Boolean),
         isTrial: form.isTrial,
+        isEnabled: form.isEnabled,
       };
       const response = await createPackage(payload);
       setPackages((current) => [response.data, ...current]);
-      setForm({ name: '', price: '', description: '', durationValue: '', durationUnit: 'month', features: '', isTrial: false });
+      setForm({ name: '', price: '', description: '', durationValue: '', durationUnit: 'month', features: '', isTrial: false, isEnabled: true });
       setShowCreateModal(false);
     } finally {
       setLoading(false);
@@ -172,7 +177,17 @@ export default function ManagePackagesPage() {
   };
 
   const resetForm = () => {
-    setForm({ name: '', price: '', description: '', durationValue: '', durationUnit: 'month', features: '', isTrial: false });
+    setForm({ name: '', price: '', description: '', durationValue: '', durationUnit: 'month', features: '', isTrial: false, isEnabled: true });
+  };
+
+  const togglePackageEnabled = async (pack: PackageItem) => {
+    const nextState = !(pack.isEnabled ?? true);
+    await updatePackage(pack.id, { isEnabled: nextState });
+    setPackages((current) =>
+      current.map((item) =>
+        item.id === pack.id ? { ...item, isEnabled: nextState } : item,
+      ),
+    );
   };
 
   return (
@@ -212,7 +227,7 @@ export default function ManagePackagesPage() {
             <div>
               <p className="text-sm text-slate-400">Active Packages</p>
               <p className="text-2xl font-semibold text-white">
-                {packages.filter(p => !p.isTrial).length}
+                {packages.filter(p => p.isEnabled !== false).length}
               </p>
             </div>
             <div className="rounded-2xl bg-green-500/10 p-3">
@@ -349,6 +364,17 @@ export default function ManagePackagesPage() {
                         <span className="text-sm text-slate-300">Trial Package</span>
                       </label>
                     </div>
+                    <div className="flex items-end">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={form.isEnabled}
+                          onChange={(e) => setForm({ ...form, isEnabled: e.target.checked })}
+                          className="h-4 w-4 rounded border-slate-700"
+                        />
+                        <span className="text-sm text-slate-300">Enabled</span>
+                      </label>
+                    </div>
                     <div className="sm:col-span-2">
                       <label className="mb-2 block text-xs text-slate-400">Description</label>
                       <textarea
@@ -395,6 +421,15 @@ export default function ManagePackagesPage() {
                           Trial
                         </span>
                       )}
+                      <span
+                        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs ${
+                          pack.isEnabled === false
+                            ? 'bg-rose-500/15 text-rose-300'
+                            : 'bg-emerald-500/15 text-emerald-300'
+                        }`}
+                      >
+                        {pack.isEnabled === false ? 'Disabled' : 'Enabled'}
+                      </span>
                       <span className="inline-flex items-center gap-1 rounded-full bg-cyan-500/15 px-2.5 py-0.5 text-xs text-cyan-300">
                         <Users className="h-3 w-3" />
                         {pack.activeSubscribers || 0} subscribers
@@ -434,6 +469,17 @@ export default function ManagePackagesPage() {
                   </div>
                   
                   <div className="flex gap-2 lg:flex-col">
+                    <button
+                      onClick={() => togglePackageEnabled(pack)}
+                      className={`inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition ${
+                        pack.isEnabled === false
+                          ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
+                          : 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20'
+                      }`}
+                    >
+                      <Power className="h-4 w-4" />
+                      {pack.isEnabled === false ? 'Enable' : 'Disable'}
+                    </button>
                     <button
                       onClick={() => handleEdit(pack)}
                       className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-800 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-700"
@@ -539,6 +585,17 @@ export default function ManagePackagesPage() {
                       className="h-4 w-4 rounded border-slate-700"
                     />
                     <span className="text-sm text-slate-300">Mark as trial package</span>
+                  </label>
+                </div>
+                <div className="flex items-end">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={form.isEnabled}
+                      onChange={(e) => setForm({ ...form, isEnabled: e.target.checked })}
+                      className="h-4 w-4 rounded border-slate-700"
+                    />
+                    <span className="text-sm text-slate-300">Enabled</span>
                   </label>
                 </div>
                 <div className="sm:col-span-2">

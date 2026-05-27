@@ -69,3 +69,5 @@ export const updatePackage = (id: number, payload: Partial<Record<string, unknow
 export const deletePackage = (id: number) => api.delete(`/packeage/${id}`);
 export const blockUser = (id: number) => api.post(`/super/block-user/${id}`);
 export const unblockUser = (id: number) => api.post(`/super/unblock-user/${id}`);
+// Impersonate a user (super-admin only)
+export const impersonateUser = (id: number) => api.post(`/super/users/${id}/impersonate`);

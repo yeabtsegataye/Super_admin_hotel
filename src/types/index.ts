@@ -42,6 +42,7 @@ export type PackageItem = {
   features: string[];
   activeSubscribers: number;
   isTrial?: boolean; // mark if package is trial
+  isEnabled?: boolean;
   createdAt: string;
 };
 

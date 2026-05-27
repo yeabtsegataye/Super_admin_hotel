@@ -8,10 +8,16 @@ const authSlice = createSlice({
             const { payload, accessToken } = action.payload
             state.user = payload
             state.token = accessToken
+            try {
+                if (accessToken) {
+                    localStorage.setItem('super_admin_token', accessToken)
+                }
+            } catch (e) {}
         },
         logOut: (state, action) => {
             state.user = null
             state.token = null
+            try { localStorage.removeItem('super_admin_token') } catch(e) {}
         }
     },
 })

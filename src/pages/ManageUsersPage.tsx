@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchUsers, blockUser, unblockUser, getBatchLicenseInfo } from '../services/authService';
+import { fetchUsers, blockUser, unblockUser, getBatchLicenseInfo, impersonateUser } from '../services/authService';
 import type { UserItem, LicenseInfo } from '../types';
 
 const pageSize = 15;
@@ -131,6 +131,27 @@ export default function ManageUsersPage() {
       }
     } finally {
       setBusyId(null);
+    }
+  };
+
+  const handleImpersonate = async (user: UserItem) => {
+    if (!confirm(`Start impersonation as ${user.email}?`)) return;
+    try {
+      const response = await impersonateUser(user.id);
+      const token = response?.data?.impersonationToken;
+      if (!token) {
+        throw new Error('No impersonation token returned');
+      }
+
+      const dashboardUrl =
+        import.meta.env.VITE_HOTEL_DASHBOARD_URL ||
+        'http://localhost:5174';
+
+      const url = `${dashboardUrl}/#/impersonate?token=${encodeURIComponent(token)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      console.error('Impersonation failed', err);
+      alert('Failed to impersonate user');
     }
   };
 
@@ -386,6 +407,12 @@ export default function ManageUsersPage() {
                         } ${busyId === user.id ? 'cursor-not-allowed opacity-70' : ''}`}
                       >
                         {user.status === 'Blocked' ? 'Unblock' : 'Block'}
+                      </button>
+                      <button
+                        onClick={() => handleImpersonate(user)}
+                        className="rounded-xl bg-indigo-500/10 px-3 py-1.5 text-xs text-indigo-400 transition hover:bg-indigo-500/20"
+                      >
+                        Impersonate
                       </button>
                     </div>
                   </td>
