@@ -38,10 +38,11 @@ export type PackageItem = {
   description: string;
   price: string;
   durationValue: number;
-  durationUnit: 'day' | 'month' | 'year'; // flexible duration type
+  durationUnit: 'day' | 'month' | 'year';
   features: string[];
+  modules: string[];
   activeSubscribers: number;
-  isTrial?: boolean; // mark if package is trial
+  isTrial?: boolean;
   isEnabled?: boolean;
   createdAt: string;
 };
