@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPackage, deletePackage, fetchPackages, updatePackage } from '../services/authService';
 import type { PackageItem } from '../types';
 import {
-  Pencil, Trash2, Plus, Search, X, Check, Clock, Tag, Star,
-  Package, Power, Users, Shield, ChevronDown, ChevronUp, Layers,
+  Pencil, Trash2, Plus, Search, X, Check, Star,
+  Package, Power, Users, ChevronDown, ChevronUp, Layers,
 } from 'lucide-react';
 
 const pageSize = 10;
