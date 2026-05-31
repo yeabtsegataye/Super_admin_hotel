@@ -67,6 +67,7 @@ export const createPackage = (payload: Record<string, unknown>) => api.post('/pa
 export const updatePackage = (id: number, payload: Partial<Record<string, unknown>>) =>
   api.put(`/super/package/${id}`, payload);
 export const deletePackage = (id: number) => api.delete(`/packeage/${id}`);
+export const removeLicense = (userId: number) => api.delete(`/super/users/${userId}/license`);
 export const blockUser = (id: number) => api.post(`/super/block-user/${id}`);
 export const unblockUser = (id: number) => api.post(`/super/unblock-user/${id}`);
 // Impersonate a user (super-admin only)

@@ -9,11 +9,14 @@ type SidebarProps = {
 };
 
 const navItems = [
-  { label: 'Dashboard', path: '/dashboard' },
-  { label: 'Manage Users', path: '/users' },
-  { label: 'Manage Packages', path: '/packages' },
-  { label: 'Payments', path: '/payments' },
-  { label: 'Security', path: '/security' },
+  { label: 'Dashboard',          path: '/dashboard'      },
+  { label: 'Manage Users',       path: '/users'          },
+  { label: 'Licensing',          path: '/licensing'      },
+  { label: 'Manage Packages',    path: '/packages'       },
+  { label: 'Payments',           path: '/payments'       },
+  { label: 'Security',           path: '/security'       },
+  { label: '🔔 Notifications',   path: '/notifications'  },
+  { label: '🎁 Referrals',       path: '/referrals'      },
 ];
 
 export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
@@ -83,23 +86,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 {navItem.label}
               </NavLink>
 
-              {navItem.path === '/users' && (
-                <div className="ml-4 mt-2 space-y-2">
-                  <NavLink
-                    to="/users/expired"
-                    onClick={onClose}
-                    className={({ isActive }) =>
-                      `block rounded-xl px-3 py-2 text-sm transition ${
-                        isActive
-                          ? 'bg-cyan-500/10 text-white border border-cyan-500/20'
-                          : 'border border-slate-800 bg-slate-950/60 text-slate-300 hover:border-slate-700 hover:bg-slate-900'
-                      }`}
-                  >
-                    Expired Licenses
-                  </NavLink>
                 </div>
-              )}
-            </div>
           ))}
         </nav>
 

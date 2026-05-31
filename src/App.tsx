@@ -9,11 +9,13 @@ import ForgotPassword from "./pages/Forget_password.jsx";
 import OverviewPage from "./pages/OverviewPage";
 import ManageUsersPage from "./pages/ManageUsersPage";
 import ManagePackagesPage from "./pages/ManagePackagesPage";
-import ExpiredLicensesPage from "./pages/ExpiredLicensesPage";
+import LicensingPage from "./pages/LicensingPage";
 import PaymentsPage from "./pages/PaymentsPage";
 import SecurityPage from "./pages/SecurityPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import UserDetailsPage from "./pages/UserDetailsPage";
+import NotificationsPage from "./pages/NotificationsPage";
+import ReferralsPage from "./pages/ReferralsPage";
 import useRefreshToken from "./hooks/useRefreshToken";
 
 function App() {
@@ -47,11 +49,13 @@ function App() {
           <Route element={<AdminLayout />}>
             <Route path="/dashboard" element={<OverviewPage />} />
             <Route path="/users" element={<ManageUsersPage />} />
-            <Route path="/users/expired" element={<ExpiredLicensesPage />} />
+            <Route path="/licensing" element={<LicensingPage />} />
             <Route path="users/:userId" element={<UserDetailsPage />} />
             <Route path="/packages" element={<ManagePackagesPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/security" element={<SecurityPage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="/referrals" element={<ReferralsPage />} />
           </Route>
         </Route>
         

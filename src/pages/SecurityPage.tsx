@@ -339,11 +339,17 @@ export default function SecurityPage() {
                   <div className="grid gap-3 text-sm sm:grid-cols-2">
                     <div className="rounded-2xl bg-slate-950/70 p-3">
                       <p className="text-xs text-slate-500">IP ADDRESS</p>
-                      <p className="font-mono text-white">{entry.ipAddress || 'Unknown'}</p>
+                      <p className="font-mono text-white">
+                        {entry.ipAddress || <span className="text-slate-500 italic text-xs">Admin Console</span>}
+                      </p>
                     </div>
                     <div className="rounded-2xl bg-slate-950/70 p-3">
                       <p className="text-xs text-slate-500">LOCATION</p>
-                      <p className="text-white">{entry.location || 'Unknown'}</p>
+                      <p className="text-white">
+                        {entry.location && entry.location !== 'Unknown location'
+                          ? entry.location
+                          : <span className="text-slate-500 italic text-xs">{entry.ipAddress ? 'Lookup unavailable' : 'Admin Console'}</span>}
+                      </p>
                     </div>
                   </div>
 
@@ -455,12 +461,43 @@ export default function SecurityPage() {
 
               <div className="rounded-2xl bg-slate-950/70 p-4">
                 <p className="text-xs text-slate-500">NETWORK INFO</p>
-                <div className="mt-2 space-y-1">
-                  <p><span className="text-slate-400">IP Address:</span> <span className="font-mono">{selectedEntry.ipAddress || 'Unknown'}</span></p>
-                  <p><span className="text-slate-400">Location:</span> {selectedEntry.location || 'Unknown'}</p>
-                  <p><span className="text-slate-400">User Agent:</span> <span className="break-all">{selectedEntry.userAgent || 'Unknown'}</span></p>
-                  <p><span className="text-slate-400">Method:</span> {selectedEntry.method || 'Unknown'}</p>
-                  <p><span className="text-slate-400">Endpoint:</span> {selectedEntry.endpoint || 'Unknown'}</p>
+                <div className="mt-2 space-y-2 text-sm">
+                  <div className="flex gap-2">
+                    <span className="text-slate-400 w-28 shrink-0">IP Address:</span>
+                    <span className="font-mono text-white break-all">
+                      {selectedEntry.ipAddress || <span className="text-slate-500 italic">Not captured</span>}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-slate-400 w-28 shrink-0">Location:</span>
+                    <span className="text-white">
+                      {selectedEntry.location && selectedEntry.location !== 'Unknown location'
+                        ? selectedEntry.location
+                        : selectedEntry.ipAddress
+                          ? <span className="text-slate-500 italic">Location lookup unavailable</span>
+                          : <span className="text-slate-500 italic">Admin Console</span>}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-slate-400 w-28 shrink-0">User Agent:</span>
+                    <span className="break-all text-white text-xs">
+                      {selectedEntry.userAgent || <span className="text-slate-500 italic">Super Admin Console</span>}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-slate-400 w-28 shrink-0">Method:</span>
+                    <span className="text-white">
+                      {selectedEntry.method
+                        ? <span className="rounded-full bg-slate-800 px-2 py-0.5 text-xs font-mono">{selectedEntry.method}</span>
+                        : <span className="text-slate-500 italic">Internal</span>}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-slate-400 w-28 shrink-0">Endpoint:</span>
+                    <span className="font-mono text-xs text-white break-all">
+                      {selectedEntry.endpoint || <span className="text-slate-500 italic">Super Admin Panel</span>}
+                    </span>
+                  </div>
                 </div>
               </div>
 
