@@ -122,7 +122,6 @@ export default function UserDetailsPage() {
     return d.toLocaleDateString();
   };
 
-  const isExpired  = user?.licenceExpiryDate && new Date(user.licenceExpiryDate) < new Date();
   const daysLeft   = licInfo?.daysRemaining ?? 0;
 
   const licStatusCls =
@@ -256,9 +255,7 @@ export default function UserDetailsPage() {
               <dl className="space-y-2.5">
                 {[
                   ['Expiry Date',    licInfo.expiryDate ? new Date(licInfo.expiryDate).toLocaleString() : '—'],
-                  ['Days Remaining', licInfo.status === 'expired'    ? 'Expired'
-                                   : licInfo.status === 'no_license' ? '—'
-                                   : `${licInfo.daysRemaining} days`],
+                  ['Days Remaining', licInfo.status === 'expired' ? 'Expired' : `${licInfo.daysRemaining} days`],
                 ].map(([k, v]) => (
                   <div key={k} className="flex justify-between border-b border-slate-800/60 pb-2">
                     <dt className="text-sm text-slate-500">{k}</dt>
