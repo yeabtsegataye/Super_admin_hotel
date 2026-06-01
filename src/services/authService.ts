@@ -61,7 +61,15 @@ export const fetchSubscribers = () => api.get('/super/subscribers');
 export const fetchExpiredLicenses = () => api.get('/super/expired-licenses');
 export const fetchUsers = () => api.get('/super/users');
 export const fetchPackages = () => api.get('/super/packages');
-export const fetchPayments = () => api.get('/super/payments');
+export const fetchPayments = (
+  page = 1,
+  limit = 15,
+  sortOrder: 'ASC' | 'DESC' = 'DESC',
+  search = '',
+) =>
+  api.get('/super/payments', {
+    params: { page, limit, sortOrder, ...(search ? { search } : {}) },
+  });
 export const fetchAudit = () => api.get('/super/security-audit');
 export const createPackage = (payload: Record<string, unknown>) => api.post('/packeage/create', payload);
 export const updatePackage = (id: number, payload: Partial<Record<string, unknown>>) =>

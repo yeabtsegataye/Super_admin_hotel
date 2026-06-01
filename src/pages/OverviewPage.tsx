@@ -79,7 +79,7 @@ export default function OverviewPage() {
         label: 'Total Revenue', 
         value: `ETB ${summary.totalRevenue?.toLocaleString() || 0}`, 
         color: 'text-green-400',
-        icon: '💰',
+        icon: '',
         change: '+12%',
         changeColor: 'text-green-400'
       },
@@ -87,7 +87,7 @@ export default function OverviewPage() {
         label: 'Active Subscriptions', 
         value: summary.activeSubscriptions?.toString() || '0', 
         color: 'text-cyan-400',
-        icon: '✅',
+        icon: '',
         change: '+5%',
         changeColor: 'text-green-400'
       },
@@ -95,7 +95,7 @@ export default function OverviewPage() {
         label: 'Expired Licenses', 
         value: summary.expiredLicenses?.toString() || '0', 
         color: 'text-red-400',
-        icon: '⚠️',
+        icon: '',
         change: '+8%',
         changeColor: 'text-red-400'
       },
@@ -103,7 +103,7 @@ export default function OverviewPage() {
         label: 'Active Hotels', 
         value: summary.activeHotels?.toString() || '0', 
         color: 'text-emerald-400',
-        icon: '🏨',
+        icon: '',
         change: '+3%',
         changeColor: 'text-green-400'
       },
@@ -111,7 +111,7 @@ export default function OverviewPage() {
         label: 'Total Hotels', 
         value: summary.totalHotels?.toString() || '0', 
         color: 'text-blue-400',
-        icon: '🏢',
+        icon: '',
         change: '+2%',
         changeColor: 'text-green-400'
       },
@@ -119,7 +119,7 @@ export default function OverviewPage() {
         label: 'Blocked Users', 
         value: summary.blockedUsers?.toString() || '0', 
         color: 'text-amber-400',
-        icon: '🚫',
+        icon: '',
         change: '-2%',
         changeColor: 'text-green-400'
       },

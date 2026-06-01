@@ -15,8 +15,8 @@ const navItems = [
   { label: 'Manage Packages',    path: '/packages'       },
   { label: 'Payments',           path: '/payments'       },
   { label: 'Security',           path: '/security'       },
-  { label: '🔔 Notifications',   path: '/notifications'  },
-  { label: '🎁 Referrals',       path: '/referrals'      },
+  { label: 'Notifications',   path: '/notifications'  },
+  { label: 'Referrals',       path: '/referrals'      },
 ];
 
 export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
